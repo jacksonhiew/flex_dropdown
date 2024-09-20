@@ -11,8 +11,10 @@ typedef MenuBuilder = Widget Function(
 );
 
 enum MenuPosition {
-  top,
-  bottom,
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
 }
 
 class RawFlexDropDown extends StatefulWidget {
@@ -21,7 +23,7 @@ class RawFlexDropDown extends StatefulWidget {
     required this.controller,
     required this.buttonBuilder,
     required this.menuBuilder,
-    this.menuPosition = MenuPosition.bottom,
+    this.menuPosition = MenuPosition.bottomLeft,
   });
 
   final OverlayPortalController controller;
@@ -49,10 +51,26 @@ class _RawFlexDropDownState extends State<RawFlexDropDown> {
         overlayChildBuilder: (BuildContext context) {
           return CompositedTransformFollower(
             link: _link,
-            targetAnchor: Alignment.bottomLeft,
+            targetAnchor: switch (widget.menuPosition) {
+              MenuPosition.topLeft => Alignment.topLeft,
+              MenuPosition.topRight => Alignment.topRight,
+              MenuPosition.bottomLeft => Alignment.bottomLeft,
+              MenuPosition.bottomRight => Alignment.bottomRight,
+            },
+            followerAnchor: switch (widget.menuPosition) {
+              MenuPosition.topLeft => Alignment.bottomLeft,
+              MenuPosition.topRight => Alignment.bottomRight,
+              MenuPosition.bottomLeft => Alignment.topLeft,
+              MenuPosition.bottomRight => Alignment.topRight,
+            },
             showWhenUnlinked: false,
             child: Align(
-              alignment: AlignmentDirectional.topStart,
+              alignment: switch (widget.menuPosition) {
+                MenuPosition.topLeft => AlignmentDirectional.bottomStart,
+                MenuPosition.topRight => AlignmentDirectional.bottomEnd,
+                MenuPosition.bottomLeft => AlignmentDirectional.topStart,
+                MenuPosition.bottomRight => AlignmentDirectional.topEnd,
+              },
               child: widget.menuBuilder(context, _buttonWidth),
             ),
           );

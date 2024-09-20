@@ -44,25 +44,35 @@ class _MyHomePageState extends State<MyHomePage> {
         alignment: Alignment.topCenter,
         child: Padding(
           padding: const EdgeInsets.only(top: 64.0),
-          child: RawFlexDropDown(
-            controller: _controller,
-            buttonBuilder: (context, onTap) {
-              return ButtonWidget(
-                width: 500,
-                onTap: onTap,
-              );
-            },
-            menuBuilder: (context, width) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: MenuWidget(
-                  width: width,
-                  onItemTap: () {
-                    _controller.hide();
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 100,
+                // margin: EdgeInsets.symmetric(horizontal: 48),
+                child: RawFlexDropDown(
+                  controller: _controller,
+                  menuPosition: MenuPosition.topLeft,
+                  buttonBuilder: (context, onTap) {
+                    return ButtonWidget(
+                      width: 500,
+                      onTap: onTap,
+                    );
+                  },
+                  menuBuilder: (context, width) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: MenuWidget(
+                        width: 250,
+                        onItemTap: () {
+                          _controller.hide();
+                        },
+                      ),
+                    );
                   },
                 ),
-              );
-            },
+              ),
+            ],
           ),
         ),
       ),
